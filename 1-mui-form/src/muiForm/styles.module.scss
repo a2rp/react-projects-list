@@ -1,0 +1,81 @@
+.container {
+    // border: 1px solid #f00;
+    padding: 30px;
+
+    .heading {
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    .form {
+        margin-top: 30px;
+        // max-width: 300px;
+
+        .section1 {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+
+            .textField {
+                min-width: 300px;
+            }
+        }
+
+        .section2 {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .section3 {
+            margin-top: 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+
+            .selectResumeContainer {
+                // border: 1px solid #aaa;
+                // padding: 5px;
+                // display: flex;
+                // gap: 5px;
+                // align-items: center;
+                // cursor: pointer;
+
+                .resumeButton {
+                    // opacity: 0;
+                }
+
+                .resumeInputFile {
+                    // position: absolute;
+                    // height: 0;
+                    // overflow: hidden;
+                    // opacity: 0;
+                }
+            }
+
+            .programmingLanguage {
+                // border: 1px solid #f00;
+                min-width: 300px;
+
+                .languageTypography {
+                    .language {
+                        font-style: italic;
+                    }
+                }
+            }
+        }
+
+        .submitButton {
+            height: 40px;
+            overflow: hidden;
+        }
+    }
+
+    .dialogContent {
+        .detail {
+            display: block;
+            // border: 1px solid #f00;
+        }
+    }
+}
