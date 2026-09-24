@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from "@mui/material";
 import styles from "./styles.module.scss";
 import { useRef, useState } from "react";
@@ -122,10 +121,10 @@ const MuiForm = () => {
             if (resume.length === 0) {
                 return toast.error("Please add your resume")
             }
-            console.log(inputData);
+            void inputData;
             handleClickOpen();
         } catch (error) {
-            console.log(error);
+            toast.error("Unable to submit the form");
         } finally {
             setTimeout(() => {
                 setIsLoading(false);
@@ -199,7 +198,7 @@ const MuiForm = () => {
                     <TextField
                         className={styles.textField}
                         value={url}
-                        onChange={event => setUrl(event.target.value)}
+                        onChange={event => { setUrl(event.target.value); setUrlError(event.target.validity.valid ? "" : "Enter a valid URL"); }}
                         label="URL"
                         placeholder="URL"
                         error={urlError.length > 0}
@@ -279,8 +278,8 @@ const MuiForm = () => {
                             className={styles.resumeInputFile}
                             type="file"
                             placeholder="select your resume"
-                            value={resume}
-                            onChange={event => setResume(event.target.value)}
+
+                            onChange={event => setResume(event.target.files?.[0]?.name ?? "")}
                         />
                     </div>
 

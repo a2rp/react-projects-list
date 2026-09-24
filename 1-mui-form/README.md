@@ -1,8 +1,20 @@
-# React + Vite
+# Material UI Form
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React form demo built with Material UI. It includes field validation, radio controls, checkboxes, file selection, grouped programming options and a submitted-data dialog.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm install
+npm run dev
+```
+
+## Preview
+
+![Material UI Form preview](screenshot.png)
+
+## Links and Support
+
+- [Portfolio](https://www.ashishranjan.net/) · [GitHub](https://github.com/a2rp) · [CodePen](https://codepen.io/ash1198) · [LinkedIn](https://www.linkedin.com/in/aashishranjan)
+- [Facebook](https://www.facebook.com/theash.ashish/) · [YouTube](https://www.youtube.com/@ashishranjan-ashz?sub_confirmation=1) · [Email](mailto:ash.ranjan09@gmail.com)
+- [Support](https://a2rp-donation-page.netlify.app/) · [Buy Me a Coffee](https://buymeacoffee.com/a2rp) · [Patreon](https://www.patreon.com/a2rp)
