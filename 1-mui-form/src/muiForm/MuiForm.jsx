@@ -114,6 +114,11 @@ const MuiForm = () => {
             return;
         }
 
+        if (!Object.values(subject).some(Boolean)) {
+            toast.error("Please select at least one subject.");
+            return;
+        }
+
         if (!resume) {
             toast.error("Please select a resume.");
             return;

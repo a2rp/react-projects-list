@@ -34,16 +34,25 @@ const MemesGenerator = () => {
         }
     };
 
-    const saveImage = (imageNumber) => {
-        toPng(document.querySelector(".meme" + imageNumber), { cacheBust: true, }).then((dataUrl) => {
-            const link = document.createElement("a");
-            link.download = "meme.png";
-            link.href = dataUrl;
-            link.click();
-        }).catch((err) => {
+    const saveImage = async (canvas, imageNumber) => {
+        if (!canvas) {
             toast.error("Unable to save this meme");
-        })
-    }
+            return;
+        }
+
+        try {
+            await canvas.querySelector("img")?.decode();
+            const dataUrl = await toPng(canvas, { cacheBust: true, pixelRatio: 2 });
+            const link = document.createElement("a");
+            link.download = `meme-${imageNumber + 1}.png`;
+            link.href = dataUrl;
+            document.body.append(link);
+            link.click();
+            link.remove();
+        } catch {
+            toast.error("Unable to save this meme");
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -85,15 +94,16 @@ const MemesGenerator = () => {
                         && <>
                             {memes.length === 0 && <p>No meme templates are available right now.</p>}
                             {memes.map((item, index) => (
-                                <div key={item.id} className={`${styles.memesContainer} meme${index}`}>
-                                    {/* <div className={styles.memeName}>{item.name}</div> */}
-                                    <img src={item.url} className={styles.memeImage} alt={item.name} />
-                                    <div className={styles.memeTopText}>{topText}</div>
-                                    <div className={styles.memeBottomText}>{bottomText}</div>
+                                <div key={item.id} className={styles.memesContainer}>
+                                    <div className={styles.memeCanvas} data-meme-canvas>
+                                        <img src={item.url} className={styles.memeImage} alt={item.name} crossOrigin="anonymous" loading="lazy" />
+                                        <div className={styles.memeTopText}>{topText}</div>
+                                        <div className={styles.memeBottomText}>{bottomText}</div>
+                                    </div>
                                     <Button
                                         variant="contained"
                                         fullWidth
-                                        onClick={() => saveImage(index)}
+                                        onClick={event => saveImage(event.currentTarget.parentElement?.querySelector("[data-meme-canvas]"), index)}
                                         className={styles.saveButton}
                                     >Save</Button>
                                 </div>

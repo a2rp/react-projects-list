@@ -19,19 +19,25 @@ function App() {
   const getJoke = async () => {
     setLoading(true);
     setMessage("");
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 10000);
+
     try {
-      const response = await fetch("https://official-joke-api.appspot.com/random_joke");
+      const response = await fetch("https://official-joke-api.appspot.com/random_joke", { signal: controller.signal });
       if (!response.ok) throw new Error("Unable to load a joke");
       const nextJoke = await response.json();
-      if (typeof nextJoke.setup !== "string" || typeof nextJoke.punchline !== "string") {
+      const setup = typeof nextJoke.setup === "string" ? nextJoke.setup.trim() : "";
+      const punchline = typeof nextJoke.punchline === "string" ? nextJoke.punchline.trim() : "";
+      if (!setup || !punchline) {
         throw new Error("The joke service returned an invalid response.");
       }
-      setJoke(nextJoke);
+      setJoke({ setup, punchline });
     } catch {
       const fallback = sampleJokes[Math.floor(Math.random() * sampleJokes.length)];
       setJoke(fallback);
-      setMessage("Showing an offline joke.");
+      setMessage("Showing a local joke instead.");
     } finally {
+      window.clearTimeout(timeoutId);
       setLoading(false);
     }
   };
