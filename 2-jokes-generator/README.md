@@ -6,8 +6,11 @@ A small React app that loads random jokes from a public endpoint and keeps local
 
 ```bash
 npm install
-npm start
+npm run dev
 ```
+
+Use `npm run build` to create a production bundle and `npm run preview` to
+preview it locally. Vite requires Node.js 20.19+ or 22.12+.
 
 ## Preview
 

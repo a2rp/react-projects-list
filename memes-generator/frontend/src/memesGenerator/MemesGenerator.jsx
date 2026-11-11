@@ -22,9 +22,13 @@ const MemesGenerator = () => {
             setIsLoading(true);
             setMemes(null);
             const response = await axios(options);
-            setMemes(response.data.data.memes);
+            const templates = response.data?.data?.memes;
+            if (response.data?.success !== true || !Array.isArray(templates)) {
+                throw new Error(response.data?.error_message || "The meme service returned an invalid response.");
+            }
+            setMemes(templates);
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message || "Unable to load meme templates.");
         } finally {
             setIsLoading(false);
         }
@@ -79,8 +83,9 @@ const MemesGenerator = () => {
                 <div className={styles.outputContainer}>
                     {memes != null
                         && <>
+                            {memes.length === 0 && <p>No meme templates are available right now.</p>}
                             {memes.map((item, index) => (
-                                <div key={index} className={`${styles.memesContainer} meme${index}`}>
+                                <div key={item.id} className={`${styles.memesContainer} meme${index}`}>
                                     {/* <div className={styles.memeName}>{item.name}</div> */}
                                     <img src={item.url} className={styles.memeImage} alt={item.name} />
                                     <div className={styles.memeTopText}>{topText}</div>

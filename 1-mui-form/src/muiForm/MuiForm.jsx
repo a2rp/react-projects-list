@@ -1,12 +1,10 @@
-import { Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, IconButton, ListSubheader, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from "@mui/material";
 import styles from "./styles.module.scss";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import CloseIcon from '@mui/icons-material/Close';
 
 const MuiForm = () => {
-    const [isLoading, setIsLoading] = useState(false);
-
     const [fullName, setFullName] = useState("");
     const [fullNameError, setFullNameError] = useState("");
 
@@ -26,8 +24,6 @@ const MuiForm = () => {
     const [urlError, setUrlError] = useState("");
 
     const [resume, setResume] = useState("");
-    const resumeInputFileRef = useRef(null);
-
     const [gender, setGender] = useState("male");
 
     const [subject, setSubject] = useState({
@@ -40,7 +36,7 @@ const MuiForm = () => {
 
 
     const handleSubjectChange = (event) => {
-        setSubject({ ...subject, [event.target.name]: event.target.checked, });
+        setSubject((current) => ({ ...current, [event.target.name]: event.target.checked }));
     };
 
     const handlleFullNameChange = (event) => {
@@ -55,9 +51,10 @@ const MuiForm = () => {
     };
 
     const handlleEmailChange = (event) => {
+        const value = event.target.value.slice(0, 40);
         const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        const isValid = regex.test(event.target.value);
-        setEmail(event.target.value.substring(0, 40));
+        const isValid = regex.test(value);
+        setEmail(value);
         if (!isValid) {
             setEmailError("Invalid email address");
         } else {
@@ -70,16 +67,17 @@ const MuiForm = () => {
         const value = event.target.value.replace(regex, "").slice(0, 20);
         setUserName(value);
         if (value.length < 3) {
-            setUserNameError("Min: 3 Char, Max: 20  Char, A-Za-z");
+            setUserNameError("Use 3 to 20 letters or numbers.");
         } else {
             setUserNameError("");
         }
     };
 
     const handlePasswordChange = (event) => {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        const isValid = regex.test(event.target.value);
-        setPassword(event.target.value.substring(0, 15));
+        const value = event.target.value.slice(0, 15);
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+        const isValid = regex.test(value);
+        setPassword(value);
         if (!isValid) {
             setPasswordError("Size: [8-15] chars, 1 uppercase, 1 lowercase, 1 number and 1 special character required");
         } else {
@@ -111,25 +109,17 @@ const MuiForm = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        try {
-            setIsLoading(true);
-            const inputData = { fullName, email, userName, password, phoneNumber, url, resume, gender, subject, programmingLanguage };
-            if (fullNameError.length > 0 || emailError.length > 0 || passwordError.length > 0 || phoneNumberError.length > 0 || urlError.length > 0) {
-                return toast.error("Form contains error");
-            }
-
-            if (resume.length === 0) {
-                return toast.error("Please add your resume")
-            }
-            void inputData;
-            handleClickOpen();
-        } catch (error) {
-            toast.error("Unable to submit the form");
-        } finally {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1000 * 3);
+        if (fullNameError || emailError || userNameError || passwordError || phoneNumberError || urlError) {
+            toast.error("Please correct the highlighted fields.");
+            return;
         }
+
+        if (!resume) {
+            toast.error("Please select a resume.");
+            return;
+        }
+
+        handleClickOpen();
     };
 
     return (
@@ -142,8 +132,8 @@ const MuiForm = () => {
                         className={styles.textField}
                         value={fullName}
                         onChange={handlleFullNameChange}
-                        label="Fullname"
-                        placeholder="Fullname"
+                        label="Full name"
+                        placeholder="Full name"
                         error={fullNameError.length > 0}
                         helperText={fullNameError.length > 0 ? fullNameError : ""}
                         required
@@ -213,7 +203,6 @@ const MuiForm = () => {
                         <FormLabel id="gender-buttons-group-label">Gender</FormLabel>
                         <RadioGroup
                             aria-labelledby="gender-buttons-group-label"
-                            defaultValue="male"
                             name="radio-buttons-group"
                             value={gender}
                             onChange={event => setGender(event.target.value)}
@@ -274,7 +263,6 @@ const MuiForm = () => {
                         <Typography>Select resume</Typography>
                         <br />
                         <TextField
-                            ref={resumeInputFileRef}
                             className={styles.resumeInputFile}
                             type="file"
                             placeholder="select your resume"
@@ -285,31 +273,27 @@ const MuiForm = () => {
 
                     <Select
                         className={styles.programmingLanguage}
-                        label="Select programming language"
+                        aria-label="Select programming language"
                         value={programmingLanguage}
                         onChange={event => setProgrammingLanguage(event.target.value)}
                     >
-                        <Typography className={styles.languageTypography}
-                            sx={{ fontWeight: 700, paddingLeft: "15px" }}
-                        >Language set 1</Typography>
+                        <ListSubheader disableSticky>Language set 1</ListSubheader>
                         <MenuItem
-                            value={"react"} selected
+                            value="react"
                             className={styles.language}
                         >React.js</MenuItem>
                         <MenuItem
-                            value={"node"}
+                            value="node"
                             className={styles.language}
                         >Node.js</MenuItem>
 
-                        <Typography className={styles.languageTypography}
-                            sx={{ fontWeight: 700, paddingLeft: "15px" }}
-                        >Language set 2</Typography>
+                        <ListSubheader disableSticky>Language set 2</ListSubheader>
                         <MenuItem
-                            value={"express"}
+                            value="express"
                             className={styles.language}
                         >Express.js</MenuItem>
                         <MenuItem
-                            value={"mongodb"}
+                            value="mongodb"
                             className={styles.language}
                         >MongoDB</MenuItem>
                     </Select>
@@ -319,12 +303,9 @@ const MuiForm = () => {
                 <Button
                     variant="contained"
                     type="submit"
-                    disabled={isLoading}
                     className={styles.submitButton}
                 >
-                    {isLoading
-                        ? <CircularProgress sx={{ padding: "10px" }} />
-                        : "Submit"}
+                    Submit
                 </Button>
             </form>
 
@@ -336,11 +317,13 @@ const MuiForm = () => {
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Form inputs"}
-                    <span style={{ float: "right" }}><CloseIcon onClick={handleClose} /></span>
+                    <IconButton aria-label="Close submission preview" onClick={handleClose} sx={{ float: "right", mt: -1, mr: -1 }}>
+                        <CloseIcon />
+                    </IconButton>
                 </DialogTitle>
                 <DialogContent className={styles.dialogContent}>
                     <DialogContentText id="alert-dialog-description">
-                        Undegiven are the details you inserted in the form.
+                        Submission preview only. No data is sent to a server, and passwords are never shown here.
                         <br />
                         <span className={styles.detail} style={{ display: "block" }}>
                             <span className={styles.detailTitle}
@@ -359,12 +342,6 @@ const MuiForm = () => {
                                 style={{ display: "block", fontWeight: "bold", marginTop: "10px" }}
                             >
                                 Username:</span> {userName}
-                        </span>
-                        <span className={styles.detail} style={{ display: "block" }}>
-                            <span className={styles.detailTitle}
-                                style={{ display: "block", fontWeight: "bold", marginTop: "10px" }}
-                            >Password:</span>
-                            {password}
                         </span>
                         <span className={styles.detail} style={{ display: "block" }}>
                             <span className={styles.detailTitle}

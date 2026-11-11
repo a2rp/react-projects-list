@@ -12,7 +12,7 @@ const App = () => (
     <div className="memeApp">
         <header className="siteHeader">
             <a className="brand" href="https://github.com/a2rp/react-projects-list" target="_blank" rel="noopener noreferrer">
-                <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Ashish Ranjan logo" />
+                <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ashish Ranjan logo" />
                 <span>Meme Studio</span>
             </a>
             <span className="headerNote">Create and save your own meme cards</span>

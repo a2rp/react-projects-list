@@ -25,7 +25,7 @@ Run it:
 ```bash
 cd 2-jokes-generator
 npm install
-npm start
+npm run dev
 ```
 
 ### 3. Meme Studio
@@ -37,12 +37,12 @@ Run it:
 ```bash
 cd memes-generator/frontend
 npm install
-npm start
+npm run dev
 ```
 
 ## Tech Stack
 
-React, JavaScript, Vite, Create React App, Material UI, Sass and CSS.
+React, JavaScript, Vite, Material UI, Sass and CSS. The Vite apps require Node.js 20.19+ or 22.12+.
 
 ## Preview
 

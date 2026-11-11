@@ -23,6 +23,9 @@ function App() {
       const response = await fetch("https://official-joke-api.appspot.com/random_joke");
       if (!response.ok) throw new Error("Unable to load a joke");
       const nextJoke = await response.json();
+      if (typeof nextJoke.setup !== "string" || typeof nextJoke.punchline !== "string") {
+        throw new Error("The joke service returned an invalid response.");
+      }
       setJoke(nextJoke);
     } catch {
       const fallback = sampleJokes[Math.floor(Math.random() * sampleJokes.length)];
@@ -37,7 +40,7 @@ function App() {
     <div className="jokeApp">
       <header className="siteHeader">
         <a className="brand" href="https://github.com/a2rp/react-projects-list" target="_blank" rel="noopener noreferrer">
-          <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Ashish Ranjan logo" />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ashish Ranjan logo" />
           <span>Jokes Generator</span>
         </a>
         <span className="headerNote">A little fun for your break</span>
